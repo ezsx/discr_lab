@@ -166,10 +166,12 @@ def comb_c(ccc,f):
 
     arr_dict_2 = []# создаем массив всех словарей для третей буквы когда k=2
     arr_dict_3 = []# создаем массив всех словарей для третей буквы когда k=3
-
+    arr_c_1 =[]
+    arr_c_2=[]
+    arr_c_3=[]
     if kn>0: # делаем проверку
         # считаем сколько можем доставить
-        c = n - (1+3) - 3*kn
+
         # генерим множество входных вариантов K
         # например если k=3 то:
         # c1=1 c2=2 c3=3/c3=4
@@ -177,40 +179,49 @@ def comb_c(ccc,f):
         # c1=3 c2=2 c3=3/c3=4
         # где c1-первая буква, c2-вторая, c3-третья
         for i in k_n:
+            c = n - (1 + 2) - 2 * kn-i
+            arr_c_1.append(c)
             dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+2)}
             arr_dict_2.append(dict_n)
         for i in k_n:
+            c = n - (1 + 3) - 2 * kn - i
+            arr_c_2.append(c)
             dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+3)}
             arr_dict_3.append(dict_n)
     else:
         c = n - (1 + 3) - 2 * kn
+        arr_c_3.append(c)
         dict_n = {ccc[0]: (kn + 1), ccc[1]: (kn + 2)}
         arr_dict_2.append(dict_n)
         dict_n = {ccc[0]: (kn + 1), ccc[1]: (kn + 3)}
         arr_dict_3.append(dict_n)
     #получаем комбинации
-    for x in combinations(str_var,c):
-        # print('x', x)
-        # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
-        str_var_c = ''.join(ccc)+''.join(x)
-        # f.write('-------------------------------- %s ----------------------------'%str_var_c)
-        # теперь перебираем все варианты и дозаписываем их в файл
-        # сначала вычислятся варианты с c1 от 1 до k и c3=k+2
-        # а потом для c1 от 1 до k и c3=k+3
-        for i in range(len(arr_dict_2)):
-            dict_n=arr_dict_2[i]
+
+    for i in range(len(arr_dict_2)):
+        dict_n = arr_dict_2[i]
+        c=arr_c_1[i]
+        for x in combinations(str_var,c):
+            # print('x', x)
+            # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
+            str_var_c = ''.join(ccc)+''.join(x)
+            # f.write('-------------------------------- %s ----------------------------'%str_var_c)
+            # теперь перебираем все варианты и дозаписываем их в файл
+            # сначала вычислятся варианты с c1 от 1 до k и c3=k+2
+            # а потом для c1 от 1 до k и c3=k+3
             for y in permut_word(str_var_c,dict_n):
                 # print(" y ",y)
                 f.write(str(y)+'\n')
                 g_cnt = g_cnt +1
                 # print(''.join(y1))
-        for i in range(len(arr_dict_3)):
-            dict_n=arr_dict_3[i]
+    for i in range(len(arr_dict_3)):
+        dict_n = arr_dict_3[i]
+        c = arr_c_2[i]
+        for x in combinations(str_var, c):
+            str_var_c = ''.join(ccc) + ''.join(x)
             for y in permut_word(str_var_c,dict_n):
-                # print(" y ",y)
                 f.write(str(y)+'\n')
                 g_cnt = g_cnt +1
-                # print(''.join(y1))
+
     return g_cnt
 
 
