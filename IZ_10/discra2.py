@@ -180,12 +180,12 @@ def comb_c(ccc,f):
         # где c1-первая буква, c2-вторая, c3-третья
         for i in k_n:
             c = n - (1 + 2) - 2 * kn-i
-            arr_c_1.append(c)
+            arr_c_2.append(c)
             dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+2)}
             arr_dict_2.append(dict_n)
         for i in k_n:
             c = n - (1 + 3) - 2 * kn - i
-            arr_c_2.append(c)
+            arr_c_3.append(c)
             dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+3)}
             arr_dict_3.append(dict_n)
     else:
@@ -199,7 +199,7 @@ def comb_c(ccc,f):
 
     for i in range(len(arr_dict_2)):
         dict_n = arr_dict_2[i]
-        c=arr_c_1[i]
+        c=arr_c_2[i]
         for x in combinations(str_var,c):
             # print('x', x)
             # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
@@ -215,7 +215,7 @@ def comb_c(ccc,f):
                 # print(''.join(y1))
     for i in range(len(arr_dict_3)):
         dict_n = arr_dict_3[i]
-        c = arr_c_2[i]
+        c = arr_c_3[i]
         for x in combinations(str_var, c):
             str_var_c = ''.join(ccc) + ''.join(x)
             for y in permut_word(str_var_c,dict_n):
@@ -240,7 +240,7 @@ def m_c(f):
         print(ccc)
         cnt += 1
         gg_cnt += comb_c(ccc,f)
-        if gg_cnt > 10**7:
+        if gg_cnt > 10**7+10**7:
             print("Может не хватить места на диске, превышен лимит комбинаций !!!")
             break
     print ("получено всего комбинаций ",gg_cnt)
