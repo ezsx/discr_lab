@@ -2,10 +2,7 @@ from itertools import *
 import time
 
 d = ['a','b','c','d','e','f','g','h','j','k']
-#длина слова
-n = 8
-#кол-во повторений 3-ей буквы
-kn = 1
+divided_arrs = ((7,1,1,1),(6,2,1,1),(5,3,1,1),(5,2,2,1),(4,4,1,1),(4,3,2,1),(4,2,2,2),(3,3,2,2,),(3,3,3,1))
 
 class Position:
 
@@ -150,158 +147,66 @@ def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
         # yield '1'
         w.next()
 
-def comb_c(ccc,f):
+# по полученному разбиению, получаем, сколько уникальных чисел разбиения
+# так как по каждому уникальному числу буквы будут значимы
+# каждая буква, должна побывать на каждом значимом числе
+def get_uniq_cnt(ccc,divided_arr_1):
+    # на вход (пример)
+    # divided_arr_1 => (4,2,2,2)
+    # ccc => ('g', 'h', 'j', 'k')
+    # на выход (пример)
+    # {'g': 4,'h':2,'j':2,'k':2}
+    # {'h': 4,'g':2,'j':2,'k':2}
+    # {'j': 4,'h':2,'g':2,'k':2}
+    # {'k': 4,'h':2,'j':2,'g':2}
+    a = set(divided_arr_1)
+    x = len(a)-1
+    # print('x ',x)
+    # print(divided_arr_1)
+    for c in permutations(ccc,x):
+        # print(c)
+        union_cc = list(c)
+        union_cc.extend(tuple(set(ccc) - set(c)))
+        # print(union_cc)
+        dict_union = {}
+        for uc,da in zip (union_cc,divided_arr_1):
+            dict_union.update({uc:da})
+        yield dict_union
+
+def main(f):
     g_cnt = 0
-    #создаем массив всех значений для первой буквы k_n
-    k_n=[]
-    for i in range(1,kn+1):
-        k_n.append(i)
-
-    dd = list(set(d)-set(ccc))
-
-    print(dd)
-    # строка перебора по оставшемуся словарю
-    str_var = ''.join(dd)
-    # сколько еще не хватает до n?
-
-    arr_dict_2 = []# создаем массив всех словарей для третей буквы когда k=2
-    arr_dict_3 = []# создаем массив всех словарей для третей буквы когда k=3
-
-    arr_c_2=[]
-    arr_c_3=[]
-    if kn>0: # делаем проверку
-        # считаем сколько можем доставить
-
-        # генерим множество входных вариантов K
-        # например если k=3 то:
-        # c1=1 c2=2 c3=3/c3=4
-        # c1=2 c2=2 c3=3/c3=4
-        # c1=3 c2=2 c3=3/c3=4
-        # где c1-первая буква, c2-вторая, c3-третья
-        for i in k_n:
-            c = n - (1 + 2) - 2 * kn-i
-            arr_c_2.append(c)
-            dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+2)}
-            arr_dict_2.append(dict_n)
-        for i in k_n:
-            c = n - (1 + 3) - 2 * kn - i
-            arr_c_3.append(c)
-            dict_n = {ccc[0]:i,ccc[1]:(kn+1),ccc[2]:(kn+3)}
-            arr_dict_3.append(dict_n)
-    else:
-        c = n - (1 + 3) - 2 * kn
-        arr_c_3.append(c)
-        dict_n = {ccc[0]: (kn + 1), ccc[1]: (kn + 2)}
-        arr_dict_2.append(dict_n)
-        dict_n = {ccc[0]: (kn + 1), ccc[1]: (kn + 3)}
-        arr_dict_3.append(dict_n)
-    #получаем комбинации
-
-    for i in range(len(arr_dict_2)):
-        dict_n = arr_dict_2[i]
-        c=arr_c_2[i]
-        for x in combinations(str_var,c):
-            # print('x', x)
-            # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
-            str_var_c = ''.join(ccc)+''.join(x)
-            # f.write('-------------------------------- %s ----------------------------'%str_var_c)
-            # теперь перебираем все варианты и дозаписываем их в файл
-            # сначала вычислятся варианты с c1 от 1 до k и c3=k+2
-            # а потом для c1 от 1 до k и c3=k+3
-            for y in permut_word(str_var_c,dict_n):
-                # print(" y ",y)
-                f.write(str(y)+'\n')
-                g_cnt = g_cnt +1
-                # print(''.join(y1))
-    for i in range(len(arr_dict_3)):
-        dict_n = arr_dict_3[i]
-        c = arr_c_3[i]
-        for x in combinations(str_var, c):
-            str_var_c = ''.join(ccc) + ''.join(x)
-            for y in permut_word(str_var_c,dict_n):
-                f.write(str(y)+'\n')
-                g_cnt = g_cnt +1
-
-    return g_cnt
-
-
-def m_c(f):
-    cnt = 0
-    gg_cnt = 0
-    #Сколько всего комбинаций из 3 или объязательных букв
-    # может быть на словаре ...
-    if kn>0:
-        dc = 3
-    else:
-        dc=2
-
-
-    for ccc in combinations(d,dc):
-        print(ccc)
-        cnt += 1
-        gg_cnt += comb_c(ccc,f)
-        if gg_cnt > 10**7+10**7: # 20 миллионов
+    cc_cnt = 0
+    # Сперва получим все сочетания из 10 по 4
+    for ccc in combinations(d,4):
+        cc_cnt += 1;print(cc_cnt, ' -> ', ccc)
+        # Дальше с каждым из этих сочетаний, мы проходим через все разбиения
+        for divide_arr in divided_arrs:
+            print(divide_arr)
+            # получаем комбинации букв по кол-ву значимых позиций и
+            # генерим через перестановки с повторениями поток в файл
+            for dd in get_uniq_cnt(ccc,divide_arr):
+                str_var_c = ''.join(ccc)
+                for y in permut_word(str_var_c, dd):
+                    # print(" y ",y)
+                    f.write(str(y) + '\n')
+                    g_cnt = g_cnt + 1
+                    # print(''.join(y1))
+        if g_cnt > 10**7:
             print("Может не хватить места на диске, превышен лимит комбинаций !!!")
             break
-    print ("получено всего комбинаций ",gg_cnt)
 
+    print ("получено всего комбинаций ",g_cnt)
 
-
-def main():
-    if kn>n-4:
-        raise Exception("кол-во повторений буквы  не может быть больше %d"%(n-4))
-    if kn<1:
-        raise Exception("кол-во повторений буквы не может быть меньше 1"%(kn))
-    if n>4+kn+len(d)-3:
-        raise Exception("n не может быть больше %d " % (kn+len(d)+1))
-    #очищаем файл
-    f =  open('workfile', 'w')
-    f.write('')
-    f.close()
-
-    f = open('workfile', 'a')
-    f.write('')
-    m_c(f)
-    f.close()
 
 time_start=time.perf_counter()
-main()
-"""
-cnt=0
-len_word = 10
-print('----------------------------------------- len_word = %d  '%len_word)
-# d_len = {str(i):7 for i in range(10)}
-d_len = {'0':7,'1':1,'2':1,'3':1}
-print(d_len)
-for x in permut_word('0123',d_len,len_word):
-    print(x)
-    cnt+=1
-    if cnt > 1000:
-        break
-print (cnt)
-
-# cnt = 0
-
-# вариант когда не паримся
-a=set()
-for x in combinations('123456',3):
-    a.add(''.join(x))
-
-#вариант когда заморочились, и один символ из словаря все таки
-# выбрасываем каждый раз
-b=set()
-d = list('123456')
-for j in range(6):
-    d_cc  =[d[i] for i,d_c in enumerate(d) if i != j]
-    for x in combinations(''.join(d_cc),3):
-        b.add(''.join(x))
-
-#разница между множествами пустая
-a_b = a - b
-print(a_b)
-#разница между множествами пустая
-b_a = b - a
-print(b_a)
-"""
+f = open('workfile', 'w')
+main(f)
+f.close()
 time_end = time.perf_counter()
-print(time_end - time_start)
+# print(time_end - time_start)
+# get_uniq_cnt(('g', 'h', 'j', 'k',),(5,3,2,1))
+# get_uniq_cnt(('g', 'h', 'j', 'k',),(4,2,2,2))
+# get_uniq_cnt(('g', 'h', 'j', 'k',),(6,2,1,1))
+
+
+
