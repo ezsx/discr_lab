@@ -144,11 +144,15 @@ def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
         w.next()
 
 time0=time.perf_counter()
-word="ПРЕДОПРЕДЕЛЕННОСТЬ"
+# word="ПРЕДОПРЕДЕЛЕННОСТЬ"
+word="aabbbcccc"
 set=tuple(set(word))
 d={}
 for i in set:
     d.update({str(i): word.count(str(i))})
+set_word=""
+for i in set:
+    set_word+=str(i)
 print(d)
 cnt=0
 # всего вариантов 18!/(4!2!2!2!2!) = 16 672 848 192 000
@@ -157,7 +161,7 @@ cnt=0
 # из расчета 170 секунд
 # и 560 мегабайт на миллион комбинаций
 f = open('workfile', 'w')
-for x in permut_word(word,d,len(word)):
+for x in permut_word(set_word,d,len(word)):
     f.write(str(x) + '\n')
     cnt += 1
     if cnt > 10**7:
