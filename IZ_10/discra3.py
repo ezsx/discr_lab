@@ -178,10 +178,10 @@ def main(f):
     cc_cnt = 0
     # Сперва получим все сочетания из 10 по 4
     for ccc in combinations(d,4):
-        cc_cnt += 1;print(cc_cnt, ' -> ', ccc)
+        cc_cnt += 1;print(cc_cnt, ' -> ', ccc," комбинаций: ",g_cnt)
         # Дальше с каждым из этих сочетаний, мы проходим через все разбиения
         for divide_arr in divided_arrs:
-            print(divide_arr)
+            print(divide_arr," комбинаций: ",g_cnt)
             # получаем комбинации букв по кол-ву значимых позиций и
             # генерим через перестановки с повторениями поток в файл
             for dd in get_uniq_cnt(ccc,divide_arr):

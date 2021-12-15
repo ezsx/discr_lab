@@ -1,12 +1,6 @@
+from itertools import product
 from itertools import *
-import time
-
-d = ['a','b','c','d','e','f','g','h','j','k']
-#длина слова
-n = 7
-#кол-во повторений 3-ей буквы
-kn = 1
-
+from itertools import chain, combinations
 class Position:
 
     def __init__(self,pos_l,p_word=None):
@@ -150,105 +144,33 @@ def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
         # yield '1'
         w.next()
 
-def comb_c(ccc,f):
-    g_cnt = 0
-    # в полученно ccc элемент 1 и 2 повторяются 2 раза
-    # 3 элемент повторяется kn раз
-    #словарь без букв, которые сюда пришли и объязательны
-    dd = list(set(d)-set(ccc))
-    print(dd)
-    # строка перебора по оставшемуся словарю
-    str_var = ''.join(dd)
-    #сколько еще не хватает до n?
-    if kn>1:
-        c = n - 2 * 2 - kn
-        dict_n = {ccc[0]:2,ccc[1]:2,ccc[2]:kn}
-    else:
-        c = n - 2 * 2
-        dict_n = {ccc[0]:2,ccc[1]:2}
-    #получаем комбинации
-    for x in combinations(str_var,c):
-        # print('x', x)
-        # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
-        str_var_c = ''.join(ccc)+''.join(x)
-        # f.write('-------------------------------- %s ----------------------------'%str_var_c)
-        for y in permut_word(str_var_c,dict_n):
-            # print(" y ",y)
-            f.write(str(y)+'\n')
-            g_cnt = g_cnt +1
-            # print(''.join(y1))
-    return g_cnt
+word="abc"
+#размещения без повторений
+acc_r=[]
+for i in product(word,repeat=len(word)):
+    acc_r.append(i)
+print(acc_r)
+#перестановки
+rep=[]
+for i in permutations(word,len(word)):
+    rep.append(i)
+print(rep)
+#размещения с повтроениями
+per=[]
 
-
-def m_c(f):
-    cnt = 0
-    gg_cnt = 0
-    #Сколько всего комбинаций из 3 объязательных бука
-    # может быть на словаре ...
-    if kn>1:
-        dc = 3
-    else:
-        dc=2
-    for ccc in combinations(d,dc):
-        print(ccc)
-        cnt += 1
-        gg_cnt += comb_c(ccc,f)
-        if gg_cnt > 10**7:
-            print("Может не хватить места на диске, превышен лимит комбинаций !!!")
-            break
-    print ("получено всего комбинаций ",gg_cnt)
-
-
-
-def main():
-    if kn>n-4:
-        raise Exception("кол-во повторений буквы  не может быть больше %d"%(n-4))
-    if kn<1:
-        raise Exception("кол-во повторений буквы не может быть меньше 1"%(kn))
-    if n>4+kn+len(d)-3:
-        raise Exception("n не может быть больше %d " % (kn+len(d)+1))
-    f =  open('workfile','w')
-    m_c(f)
-    f.close()
-
-time_start=time.perf_counter()
-main()
-"""
-cnt=0
-len_word = 10
-print('----------------------------------------- len_word = %d  '%len_word)
-# d_len = {str(i):7 for i in range(10)}
-d_len = {'0':7,'1':1,'2':1,'3':1}
-print(d_len)
-for x in permut_word('0123',d_len,len_word):
-    print(x)
-    cnt+=1
-    if cnt > 1000:
-        break
-print (cnt)
-
-# cnt = 0
-
-# вариант когда не паримся
-a=set()
-for x in combinations('123456',3):
-    a.add(''.join(x))
-
-#вариант когда заморочились, и один символ из словаря все таки
-# выбрасываем каждый раз
-b=set()
-d = list('123456')
-for j in range(6):
-    d_cc  =[d[i] for i,d_c in enumerate(d) if i != j]
-    for x in combinations(''.join(d_cc),3):
-        b.add(''.join(x))
-
-#разница между множествами пустая
-a_b = a - b
-print(a_b)
-#разница между множествами пустая
-b_a = b - a
-print(b_a)
-"""
-time_end = time.perf_counter()
-print(time_end - time_start)
+#все подмножества
+def powerset(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+pod=powerset(word)
+print(list(pod))
+#все сочетания
+com=[]
+for i in combinations(word,2):
+    com.append(i)
+print(com)
+#все сочетания с повторениями
+com_r=[]
+for i in combinations_with_replacement(word,2):
+    com_r.append(i)
+print(com_r)
