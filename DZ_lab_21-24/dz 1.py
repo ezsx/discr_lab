@@ -144,33 +144,50 @@ def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
         # yield '1'
         w.next()
 
+f =  open('workfile', 'w')
+f.write('')
+
 word="abc"
 #размещения без повторений
 acc_r=[]
+f.write(str('размещения без повторений')+'\n')
 for i in product(word,repeat=len(word)):
     acc_r.append(i)
+    f.write(str(i) + '\n')
 print(acc_r)
 #перестановки
 rep=[]
+f.write(str('перестановки')+'\n')
 for i in permutations(word,len(word)):
     rep.append(i)
+    f.write(str(i) + '\n')
 print(rep)
 #размещения с повтроениями
 per=[]
 
 #все подмножества
+f.write(str('все подмножества')+'\n')
 def powerset(iterable):
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 pod=powerset(word)
-print(list(pod))
+pod=list(pod)
+for i in pod:
+    f.write(str(i) + '\n')
 #все сочетания
+f.write(str('все сочетания')+'\n')
 com=[]
 for i in combinations(word,2):
     com.append(i)
+    f.write(str(i) + '\n')
 print(com)
 #все сочетания с повторениями
+f.write(str('все сочетания с повторениями')+'\n')
 com_r=[]
 for i in combinations_with_replacement(word,2):
     com_r.append(i)
+    f.write(str(i) + '\n')
 print(com_r)
+
+
+f.close()
