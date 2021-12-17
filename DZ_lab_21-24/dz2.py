@@ -175,19 +175,35 @@ def comb_c(ccc,f):
             # print(''.join(y1))
     return g_cnt
 
-
-def comb_c_r(ccc,f):
+def comb_c_rrr(ccc,f):
     g_cnt = 0
     f.write("с повтором")
+    # в полученно ccc элемент 1 и 2 повторяются 2 раза
+    # 3 элемент повторяется kn раз
+    #словарь без букв, которые сюда пришли и объязательны
+    dd = list(set(d)-set(ccc))
+    print(dd)
+    # строка перебора по оставшемуся словарю
+    str_var = ''.join(dd)
     #сколько еще не хватает до n?
+    c = 5 - 2
     dict_n = {ccc[0]:2}
+    a=[]
+    b=[]
     #получаем комбинации
-    for y in permut_word("bcdef",dict_n):
+    for x in combinations_with_replacement(str_var,c):
+        # print('x', x)
+        # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
+        str_var_c = ''.join(ccc)+''.join(x)
+        # f.write('-------------------------------- %s ----------------------------'%str_var_c)
+        for y in permut_word(str_var_c,dict_n):
             # print(" y ",y)
-            f.write(str(y)+'\n')
-            g_cnt = g_cnt +1
-            # print(''.join(y1))
-    return g_cnt
+            a.append(str(y))
+    a = set(a)
+    for i in a:
+        f.write(str(i)+"\n")
+    return len(a)
+
 def m_c(f):
     gg_cnt = 0
     gg_cnt1 = 0
@@ -195,7 +211,8 @@ def m_c(f):
     # может быть на словаре ...
     dc=('a')
     gg_cnt += comb_c(dc,f)
-    gg_cnt1+= comb_c_r(dc,f)
+
+    gg_cnt1+= comb_c_rrr(dc,f)
     print("получено всего комбинаций ", gg_cnt)
     print("получено всего комбинаций с повтором", gg_cnt1)
 
@@ -208,7 +225,7 @@ def main():
     f.close()
 
 # формальная запись: если не повторяются C(5_2)*P(5!/2!) = 600
-#                    если повторяются    C(5_2)*P(5!)    = 1200
+#                    если повторяются    C(5_3)*P(5!/)    = 1200
 time_start=time.perf_counter()
 main()
 time_end = time.perf_counter()
