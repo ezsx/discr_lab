@@ -1,6 +1,9 @@
-from itertools import product
 from itertools import *
-from itertools import chain, combinations
+import time
+
+d = ['a','b','c','d','e','f']
+
+
 class Position:
 
     def __init__(self,pos_l,p_word=None):
@@ -144,52 +147,96 @@ def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
         # yield '1'
         w.next()
 
-f =  open('workfile', 'w')
-f.write('')
-
-word="abc"
-#размещения без повторений
-acc_r=[]
-f.write(str('размещения без повторений')+'\n')
-for i in product(word,repeat=len(word)):
-    acc_r.append(i)
-    f.write(str(i) + '\n')
-print(acc_r)
-#перестановки
-rep=[]
-f.write(str('перестановки')+'\n')
-for i in permutations(word,len(word)):
-    rep.append(i)
-    f.write(str(i) + '\n')
-print(rep)
-#размещения с повтро
-#
-# ениями
-per=[]
-
-#все подмножества
-f.write(str('все подмножества')+'\n')
-def powerset(iterable):
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-pod=powerset(word)
-pod=list(pod)
-for i in pod:
-    f.write(str(i) + '\n')
-#все сочетания
-f.write(str('все сочетания')+'\n')
-com=[]
-for i in combinations(word,2):
-    com.append(i)
-    f.write(str(i) + '\n')
-print(com)
-#все сочетания с повторениями
-f.write(str('все сочетания с повторениями')+'\n')
-com_r=[]
-for i in combinations_with_replacement(word,2):
-    com_r.append(i)
-    f.write(str(i) + '\n')
-print(com_r)
 
 
-f.close()
+def comb_c(ccc,f):
+    g_cnt = 0
+    f.write("для 4")
+    #словарь без букв, которые сюда пришли и объязательны
+    dd = list(set(d)-set(ccc))
+    print(dd)
+    # строка перебора по оставшемуся словарю
+    str_var = ''.join(dd)
+    #сколько еще не хватает до n?
+    c = []
+    dict_n = []
+    for i in [3,4]:
+        c.append(4-i)
+        dict_n.append({ccc[0]: i})
+    #получаем комбинации
+    for i in range(len(dict_n)):
+        dict_ar = dict_n[i]
+        cc = c[i]
+        for x in combinations(str_var, cc):
+            # print('x', x)
+            # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
+            str_var_c = ''.join(ccc) + ''.join(x)
+            # f.write('-------------------------------- %s ----------------------------'%str_var_c)
+            # теперь перебираем все варианты и дозаписываем их в файл
+            # сначала вычислятся варианты с c1 от 1 до k и c3=k+2
+            # а потом для c1 от 1 до k и c3=k+3
+            for y in permut_word(str_var_c, dict_ar):
+                # print(" y ",y)
+                f.write(str(y) + '\n')
+                g_cnt = g_cnt + 1
+                # print(''.join(y1))
+    return g_cnt
+
+def comb_c_rrr(ccc,f):
+    g_cnt = 0
+    f.write("для 7")
+    # словарь без букв, которые сюда пришли и объязательны
+    dd = list(set(d) - set(ccc))
+    print(dd)
+    # строка перебора по оставшемуся словарю
+    str_var = ''.join(dd)
+    # сколько еще не хватает до n?
+    c = []
+    dict_n = []
+    for i in [3, 4, 5, 6, 7]:
+        c.append(7 - i)
+        dict_n.append({ccc[0]: i})
+    # получаем комбинации
+    for i in range(len(dict_n)):
+        dict_ar = dict_n[i]
+        cc = c[i]
+        for x in combinations(str_var, cc):
+            # print('x', x)
+            # теперь каждую комбинацию дополняем постоянной частью что пришла сюда
+            str_var_c = ''.join(ccc) + ''.join(x)
+            # f.write('-------------------------------- %s ----------------------------'%str_var_c)
+            # теперь перебираем все варианты и дозаписываем их в файл
+            # сначала вычислятся варианты с c1 от 1 до k и c3=k+2
+            # а потом для c1 от 1 до k и c3=k+3
+            for y in permut_word(str_var_c, dict_ar):
+                # print(" y ",y)
+                f.write(str(y) + '\n')
+                g_cnt = g_cnt + 1
+                # print(''.join(y1))
+    return g_cnt
+
+
+def m_c(f):
+    gg_cnt = 0
+    gg_cnt1 = 0
+    #Сколько всего комбинаций из 3 объязательных бука
+    # может быть на словаре ...
+    dc=('a')
+    gg_cnt += comb_c(dc,f)
+
+    gg_cnt1+= comb_c_rrr(dc,f)
+    print("получено всего комбинаций для 4", gg_cnt)
+    print("получено всего комбинаций для 7", gg_cnt1)
+
+def main():
+    f = open('workfile', 'w')
+    f.write("")
+    f.close()
+    f = open('workfile', 'a')
+    m_c(f)
+    f.close()
+
+time_start=time.perf_counter()
+main()
+time_end = time.perf_counter()
+print(time_end - time_start)
