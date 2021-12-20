@@ -4,6 +4,7 @@ def fac(n):
     if n == 0:
         return 1
     return fac(n-1) * n
+
 def G(n):
     return pow(2,(n*(n-1))/2)
 
