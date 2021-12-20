@@ -151,7 +151,7 @@ word="abc"
 #размещения без повторений
 acc_r=[]
 f.write(str('размещения без повторений')+'\n')
-for i in product(word,repeat=len(word)):
+for i in product(word,repeat=3):
     acc_r.append(i)
     f.write(str(i) + '\n')
 print(acc_r)
@@ -174,6 +174,7 @@ def powerset(iterable):
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 pod=powerset(word)
 pod=list(pod)
+print(pod)
 for i in pod:
     f.write(str(i) + '\n')
 #все сочетания

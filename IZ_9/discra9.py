@@ -12,7 +12,7 @@ def C(p,k,m):
     if k>p:
         return 0
 
-    print("(",m,ss*m,")","C(%d,%d)=%d" % (p, k, (1 / k) * sum(p, k,m)))
+    print("(",m,ss*k*2,")","C(%d,%d)=%d" % (p, k, (1 / k) * sum(p, k,m)))
     return (1/k)*sum(p,k,m)
 
-print(C(8,8,0))
+print(C(7,7,0))

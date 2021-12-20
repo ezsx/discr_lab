@@ -225,7 +225,7 @@ def main():
     f.close()
 
 # формальная запись: если не повторяются C(5_2)*P(5!/2!) = 600
-#                    если повторяются    C(5_3)*P(5!/)    = 1200
+#                    если повторяются    C(5_3)*P(5!/2)+    = 1200
 time_start=time.perf_counter()
 main()
 time_end = time.perf_counter()
