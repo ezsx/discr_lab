@@ -1,5 +1,41 @@
+from itertools import chain, combinations, product
 from itertools import *
 import time
+
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+def subsets(s):
+    return map(set, powerset(s))
+
+POD_M=list(subsets(['a','b','c','d','e','f','g','h','j','k']))
+
+divided_arrs = ((6,1,1,1,1),(5,2,1,1,1),(4,3,1,1,1),(4,2,2,1,1),(3,3,2,1,1),(3,2,2,2,1),(2,2,2,2,2))
+
+def get_uniq_cnt(ccc,divided_arr_1):
+    # на вход (пример)
+    # divided_arr_1 => (4,2,2,2)
+    # ccc => ('g', 'h', 'j', 'k')
+    # на выход (пример)
+    # {'g': 4,'h':2,'j':2,'k':2}
+    # {'h': 4,'g':2,'j':2,'k':2}
+    # {'j': 4,'h':2,'g':2,'k':2}
+    # {'k': 4,'h':2,'j':2,'g':2}
+    a = set(divided_arr_1)
+    x = len(a)-1
+    # print('x ',x)
+    # print(divided_arr_1)
+    for c in permutations(ccc,x):
+        # print(c)
+        union_cc = list(c)
+        union_cc.extend(tuple(set(ccc) - set(c)))
+        # print(union_cc)
+        dict_union = {}
+        for uc,da in zip (union_cc,divided_arr_1):
+            dict_union.update({uc:da})
+        yield dict_union
 
 class Position:
 
@@ -136,46 +172,12 @@ class Word:
         # return  [self.dict_list[p.cur_ind_c] for p in self.pos_list]
         return  self._word
 
-def permut_word(p_dict:str,p_dict_cnt_in_wrd:dict,p_len_word=0):
-    w = Word(p_dict,p_dict_cnt_in_wrd,p_len_word)
-    while w.is_has_next:
-        yield w.get_word()
-        # yield '1'
-        w.next()
-
-
-#d = ['a','b','c','d','e','f','g','h','j','k']
-divided_arrs = ((6,1,1,1,1),(5,2,1,1,1),(4,3,1,1,1),(4,2,2,1,1),(3,3,2,1,1),(3,2,2,2,1),(2,2,2,2,2))
-
-# по полученному разбиению, получаем, сколько уникальных чисел разбиения
-# так как по каждому уникальному числу буквы будут значимы
-# каждая буква, должна побывать на каждом значимом числе
-def to_dict(word):
-    dr={}
-    ff=tuple(set(word))
-    ff_str=""
-    for i in ff:
-        dr.update({str(i): i})
-        ff_str+=str(i)
-    return ff_str,dr,len(word)
-
-cnt=0
-f = open('workfile', 'w')
-for j in divided_arrs:
-    iw, dc, lw = to_dict(j)
-    print(iw, dc, lw)
-    for x in permut_word(iw, dc, len(iw)):
-        f.write(str(x) + '\n')
-        print(x)
-        cnt += 1
-        if cnt > 10**7:
-            break
-
-time_start=time.perf_counter()
-
-f.close()
-time_end = time.perf_counter()
-# print(time_end - time_start)
-# get_uniq_cnt(('g', 'h', 'j', 'k',),(5,3,2,1))
-# get_uniq_cnt(('g', 'h', 'j', 'k',),(4,2,2,2))
-# get_uniq_cnt(('g', 'h', 'j', 'k',),(6,2,1,1))
+all_a=[[],[],[],[],[],[],[],[],[],[],[]]
+l=0
+for i in POD_M:
+    l = len(i)
+    all_a[l-1].append(i)
+fl=0
+for i in all_a:
+    fl+=1
+    print(fl,"_-_",i)
