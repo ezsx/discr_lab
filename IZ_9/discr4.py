@@ -9,6 +9,8 @@ def count(n,k):
         s+=1
         if s%kof==0:
             s1+=1
-    return comb(s+s1-1,kof)
+    print(s+s1)
+    print(kof-1)
+    return comb(s+s1-1,kof-1)
 
 print(count(10,5))

@@ -17,4 +17,4 @@ def sum(n):
 def Gcon(n):
     return G(n)-(1/n)*sum(n)
 
-print(Gcon(8))
+print(Gcon(5))

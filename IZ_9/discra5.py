@@ -5,5 +5,7 @@ def C(n,k):
         return 1
     if k==0 or n==0:
         return 0
+    #print("C(%d,%d)" % (n,k))
+    #print(C(n-1,k-1)+(n-1)*C(n-1,k))
     return C(n-1,k-1)+(n-1)*C(n-1,k)
 print(C(10,5))

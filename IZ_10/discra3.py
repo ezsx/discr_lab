@@ -164,7 +164,7 @@ def get_uniq_cnt(ccc,divided_arr_1):
     # print('x ',x)
     # print(divided_arr_1)
     for c in permutations(ccc,x):
-        # print(c)
+        print(c)
         union_cc = list(c)
         union_cc.extend(tuple(set(ccc) - set(c)))
         # print(union_cc)
